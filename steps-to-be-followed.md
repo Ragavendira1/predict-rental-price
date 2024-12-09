@@ -27,7 +27,7 @@ You can run a Docker container for the machine learning app and make predictions
 ### Pull the Docker Image
 First, pull the Docker image for the application:
 ```bash
-$ docker pull ssadcloud/mlapp:latest
+$ docker pull rragavendira/mlapp:latest
 ```
 
 ### Run the Docker Container
