@@ -19,7 +19,11 @@ To install or upgrade scikit-learn, run:
 $ pip install -U scikit-learn
 ```
 
-
+### scikit-learn Installation
+To install joblib, run:
+```bash
+$ pip install joblib
+```
 
 ## 2. Running Docker Container Locally
 You can run a Docker container for the machine learning app and make predictions locally.
