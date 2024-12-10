@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
 
 # Data Processing
 # Create Data frame for Data Processing
@@ -18,6 +19,16 @@ X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.20)
 model = LinearRegression().fit(X,y)
 
 # Model Prediction
-predict_rental_price = model.predict(X_test[0].reshape(1,-1))[0]
-print("The Actual Rental Price for Rooms with count = ",X_test[0][0],"and","Area in Sqft = ",X_test[0][1],"is =",y_test[0])
-print("The Predicated Rental Price for Rooms with count = ",X_test[0][0],"and","Area in Sqft = ",X_test[0][1],"is =",predict_rental_price)
+y_pred = model.predict(X_test)
+
+#Compute RMSE
+rmse = np.sqrt(mean_squared_error(y_test,y_pred))
+print(f"RMSE: {rmse}")
+
+# Example Prediction for a specific test sample
+sample_index = 0 # change ths index to test different samples
+predict_rental_price = model.predict([X_test[sample_index]])[0]
+print(f"The Actual Rental Price for Rooms with count = {X_test[sample_index][0]} and Area in Sqft ={X_test[sample_index][1]} is={y_test[sample_index]}")
+print(f"The Predicated Rental Price for Rooms with count = {X_test[sample_index][0]} and Area in Sqft = {X_test[sample_index][1]} is={predict_rental_price}")
+
+
