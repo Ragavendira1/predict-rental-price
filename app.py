@@ -45,6 +45,9 @@ area_sqft  = float(input("Enter the Area in Sqft"))
 
 user_input = np.array([[room_count,area_sqft]])
 
+
 predict_rental_price = model.predict(user_input)[0]
 
 print(f"The Predicated Rental Price for Rooms count = {room_count} and Area in Sqft = {area_sqft} is: {predict_rental_price}")
+
+

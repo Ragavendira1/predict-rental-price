@@ -24,6 +24,28 @@ To install joblib, run:
 ```bash
 $ pip install joblib
 ```
+## List of Docker Commands
+$ docker images
+$ docker ps -a
+$ docker images
+$ docker build -t <name_of_the_docker_image>
+$ docker login
+$ docker rmi <image-id>
+$ docker rm $(docker ps a)
+$ docker rmi $(docker images -a -q)
+$ docker push <<image_id>>
+$ docker push rragavendira/mlapp:latest
+
+######################################
+Using Jenkins
+######################################
+Name of the s3 bucket: mlapp-models-stroage-artifacts-12-12-24
+URI of the S3 Bucket: s3://mlapp-models-stroage-artifacts-12-12-24
+Job1: 01_mlapp_build_docker_image
+This Jenkins job is designated to pull the ML mode from GitHub, and build the source code and generate .joblib file and upload to s3 bucket and build image for MLApp
+
+Job2: 02_mlapp_push_docker_image_registry
+This Job to push image built from 01_mlapp_build_docker_image into Docker Container Registry
 
 ## 2. Running Docker Container Locally
 You can run a Docker container for the machine learning app and make predictions locally.
