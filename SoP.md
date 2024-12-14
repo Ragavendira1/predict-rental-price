@@ -35,6 +35,19 @@ $ aws configure # Configure AWS CLI to allow program
     - SecretAccesskey:
     - region: us-east-2
     - output: json 
+### kind cluster Installation
+To install kind, follow instruction on windows: for other os deployment option. pls refer to the url: https://kind.sigs.k8s.io/docs/user/quick-start/
+Step 1: ```powershell
+$ curl.exe -Lo kind-windows-amd64.exe https://kind.sigs.k8s.io/dl/v0.25.0/kind-windows-amd64
+Move-Item .\kind-windows-amd64.exe c:\some-dir-in-your-PATH\kind.exe
+```
+Step 2: create environment path for above location as below
+c:\kind\
+save and close 
+Step 3: Open New Command Prompt: type below 
+``` kind ''''
+Step 4: Create kind cluster as below 
+``` sh kind create cluster --name main-kind-k8s-cluster ```
 ## List of Docker Commands
 $ docker images
 $ docker ps -a
@@ -61,3 +74,20 @@ This Jenkins job is designated to pull the ML mode from GitHub, and build the so
 
 Job2: 02_mlapp_push_docker_image_registry
 This Job to push image built from 01_mlapp_build_docker_image into Docker Container Registry
+
+## AWS ECR Commands
+Make sure that you have the latest version of the AWS TOOLS for PowerShell and Docker installed. For more information, see Getting Started with Amazon ECR .
+Use the following steps to authenticate and push an image to your repository. For additional registry authentication methods, including the Amazon ECR credential helper, see Registry Authentication .
+Retrieve an authentication token and authenticate your Docker client to your registry. Use the AWS TOOLS for PowerShell:
+Step 1:
+(Get-ECRLoginCommand).Password | docker login --username AWS --password-stdin 590183798731.dkr.ecr.us-east-1.amazonaws.com
+Note: If you receive an error using the AWS TOOLS for PowerShell, make sure that you have the latest version of the AWS TOOLS for PowerShell and Docker installed.
+Build your Docker image using the following command. For information on building a Docker file from scratch see the instructions here . You can skip this step if your image is already built:
+Step 2: 
+docker build -t mlappecr .
+After the build completes, tag your image so you can push the image to this repository:
+Step 3: 
+docker tag mlappecr:latest 590183798731.dkr.ecr.us-east-1.amazonaws.com/mlappecr:latest
+Run the following command to push this image to your newly created AWS repository:
+Step 4: 
+docker push 590183798731.dkr.ecr.us-east-1.amazonaws.com/mlappecr:latest
