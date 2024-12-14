@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewreport" content="width=device-width, inital-scale=1.0">
+        <title><h1>Predict Rental Price using ML model</h1></title>
+    </head>
+    <body>
+        <form action="/predict" method="post">
+            <label for ="rooms">Number of Rooms: </label>
+            <input type="number" name="rooms" id="rooms" required>
+            <br>
+            <label for ="sqft">sqft:</label>
+            <input type = "number" name="sqft", id="sqft" required>
+            <br>
+            <button type="submit">Predict</button>
+        </form>
+    </body>
+</html>

@@ -35,19 +35,6 @@ $ aws configure # Configure AWS CLI to allow program
     - SecretAccesskey:
     - region: us-east-2
     - output: json 
-### kind cluster Installation
-To install kind, follow instruction on windows: for other os deployment option. pls refer to the url: https://kind.sigs.k8s.io/docs/user/quick-start/
-Step 1: ```powershell
-$ curl.exe -Lo kind-windows-amd64.exe https://kind.sigs.k8s.io/dl/v0.25.0/kind-windows-amd64
-Move-Item .\kind-windows-amd64.exe c:\some-dir-in-your-PATH\kind.exe
-```
-Step 2: create environment path for above location as below
-c:\kind\
-save and close 
-Step 3: Open New Command Prompt: type below 
-``` kind ''''
-Step 4: Create kind cluster as below 
-``` sh kind create cluster --name main-kind-k8s-cluster ```
 ## List of Docker Commands
 $ docker images
 $ docker ps -a
@@ -63,6 +50,12 @@ $ docker push rragavendira/mlapp:latest
 ######################################
 Using Jenkins
 ######################################
+
+#### Start the Jenkins 
+change dir to Jenkins
+cd C:\jenkins\
+java -jar .\jenkins.war --enable-future-java
+
 Name of the s3 bucket: mlapp-models-stroage-artifacts-13-12-24
 URI of the S3 Bucket: s3://mlapp-models-stroage-artifacts-13-12-24
 AWS S3 CLI command for the file upload: 
@@ -91,3 +84,29 @@ docker tag mlappecr:latest 590183798731.dkr.ecr.us-east-1.amazonaws.com/mlappecr
 Run the following command to push this image to your newly created AWS repository:
 Step 4: 
 docker push 590183798731.dkr.ecr.us-east-1.amazonaws.com/mlappecr:latest
+### Installing Kubernetes (kind)
+To install `kind` (Kubernetes in Docker), run the following command on Windows:
+```bash
+curl.exe -Lo kind-windows-amd64.exe https://kind.sigs.k8s.io/dl/v0.24.0/kind-windows-amd64
+Move-Item .\kind-windows-amd64.exe c:\kind\kind.exe
+```
+
+### Create a Kubernetes Cluster
+Create a local Kubernetes cluster using `kind`:
+```bash
+$ kind create cluster --name main-k8s-cluster
+```
+
+Verify that the cluster is up and running:
+```bash
+$ kubectl get nodes
+$ kubectl get pods
+$ kubectl get deployments
+```
+
+### Deploying the Application on Kubernetes
+Use the following commands to deploy the machine learning app.
+
+#### Apply Deployment Configuration:
+```bash
+$ kubectl apply -f manifests/mlapp-deployment.yaml
