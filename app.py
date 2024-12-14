@@ -1,12 +1,11 @@
 #Importing all required libraries
 import pandas as pd
-import joblib
-
 import numpy as np
+import joblib
+from flask import Flask, render_template, request 
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
-from flask import Flask, render_template, request 
 
 #from joblib import memory
 
@@ -20,14 +19,15 @@ y = rentalDF['price'].values   # Labels
 
 # Split Data into Training and Testing 
 X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.20)
+
 # Model Training
 model = LinearRegression().fit(X,y)
 
 # Save the Model
-joblib.dump(model,'rental_price_model.joblib')
+joblib.dump(model,'model/rental_price_model.joblib')
 
 #Load the Model
-model = joblib.load('rental_price_model.joblib')
+model = joblib.load('model/rental_price_model.joblib')
 
 # initialize Flask Application
 app = Flask(__name__)
