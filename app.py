@@ -24,10 +24,10 @@ X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.20)
 model = LinearRegression().fit(X,y)
 
 # Save the Model
-joblib.dump(model,'model/rental_price_model.joblib')
+joblib.dump(model,'rental_price_model.joblib')
 
 #Load the Model
-model = joblib.load('model/rental_price_model.joblib')
+model = joblib.load('rental_price_model.joblib')
 
 # initialize Flask Application
 app = Flask(__name__)
