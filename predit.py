@@ -7,7 +7,7 @@ import joblib
 
 # Load the model
 
-model = joblib.load('rental_price_model.joblib')
+model = joblib.load('model/rental_price_model.joblib')
 
 room_count = int(input("Enter the number of rooms"))
 area_sqft  = float(input("Enter the Area in Sqft"))
