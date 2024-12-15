@@ -113,3 +113,15 @@ $ kubectl apply -f k8s-config-files/mlapp-deployment.yaml
 $ kubectl apply -f k8s-config-files/mlapp-service.yaml
 $ kubectl port-forward svc/mlapp-service 5000:5000
 ```
+
+### Jenkins Job 3 #################3
+Job 3: 03_mlapp_deploy_to_k8s
+# Task 1
+``` $ kubectl delete -f .\k8s-config-files\mlapp-deployment.yaml
+    $ kubectl delete -f .\k8s-config-files\mlapp-service.yaml
+```
+
+# Task 2
+``` $ kubectl apply -f .\k8s-config-files\mlapp-deployment.yaml
+    $ kubectl apply -f .\k8s-config-files\mlapp-service.yaml
+```
