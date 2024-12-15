@@ -125,3 +125,25 @@ Job 3: 03_mlapp_deploy_to_k8s
 ``` $ kubectl apply -f .\k8s-config-files\mlapp-deployment.yaml
     $ kubectl apply -f .\k8s-config-files\mlapp-service.yaml
 ```
+
+
+### Installing Kubernetes (kind)
+To install `kind` (Kubernetes in Docker), run the following command on Windows:
+```bash
+curl.exe -Lo kind-windows-amd64.exe https://kind.sigs.k8s.io/dl/v0.24.0/kind-windows-amd64
+Move-Item .\kind-windows-amd64.exe c:\kind\kind.exe
+```
+### check kind version 
+``` bash kind ```
+### Install kubeflow on local mahcine using kind #####
+ref: https://www.kubeflow.org/docs/components/pipelines/legacy-v1/installation/localcluster-deployment/
+``` bash 
+export PIPELINE_VERSION=2.3.0
+kubectl apply -k "github.com/kubeflow/pipelines/manifests/kustomize/cluster-scoped-resources?ref=$PIPELINE_VERSION"
+kubectl wait --for condition=established --timeout=60s crd/applications.app.k8s.io
+kubectl apply -k "github.com/kubeflow/pipelines/manifests/kustomize/env/platform-agnostic?ref=$PIPELINE_VERSION"
+```
+``` bash 
+kubectl port-forward -n kubeflow svc/ml-pipeline-ui 8083:80 ```
+
+### Open your browser and resolve http://localhost:8083
