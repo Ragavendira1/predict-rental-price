@@ -1,3 +1,4 @@
 .venv
 .ipynb_checkpoints
 *.joblib
+k8s-config-files/kind-api-cluster.yaml  
