@@ -19,4 +19,4 @@ spec:
         image: rragavendira/mlapp:1.0
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 80
+        - containerPort: 5000
