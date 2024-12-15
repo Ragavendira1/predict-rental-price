@@ -109,4 +109,7 @@ Use the following commands to deploy the machine learning app.
 
 #### Apply Deployment Configuration:
 ```bash
-$ kubectl apply -f manifests/mlapp-deployment.yaml
+$ kubectl apply -f k8s-config-files/mlapp-deployment.yaml
+$ kubectl apply -f k8s-config-files/mlapp-service.yaml
+$ kubectl port-forward svc/mlapp-service 5000:5000
+```
