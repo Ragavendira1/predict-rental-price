@@ -1,0 +1,93 @@
+# PIPELINE DEFINITION
+# Name: rental-prediction-pipeline
+# Outputs:
+#    Output: float
+components:
+  comp-modeldevelopment:
+    executorLabel: exec-modeldevelopment
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: NUMBER_DOUBLE
+deploymentSpec:
+  executors:
+    exec-modeldevelopment:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - modeldevelopment
+        command:
+        - sh
+        - -c
+        - "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip ||\
+          \ python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1\
+          \ python3 -m pip install --quiet --no-warn-script-location 'kfp==2.11.0'\
+          \ '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"'  &&\
+          \  python3 -m pip install --quiet --no-warn-script-location 'numpy' 'pandas'\
+          \ 'joblib' 'scikit-learn' 'flask' && \"$0\" \"$@\"\n"
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef modeldevelopment() -> float:\n    #Importing all required libraries\n\
+          \    import pandas as pd\n    import numpy as np\n    import joblib\n  \
+          \  from flask import Flask, render_template, request \n    from sklearn.linear_model\
+          \ import LinearRegression\n    from sklearn.model_selection import train_test_split\n\
+          \    from sklearn.metrics import mean_squared_error\n\n\n    # Data Processing\n\
+          \    # Load and Process the Data \n    #rentalDF = pd.read_csv('data/rental_1000.csv')\n\
+          \    rentalDF = pd.read_csv('https://raw.githubusercontent.com/Ragavendira1/predict-rental-price/d1ff8b034e32baf4ef77cbd9752f346e258f61c0/data/rental_1000.csv')\n\
+          \    # Data Transformation(Featurization  - Use Features for Model Development)\n\
+          \    X = rentalDF[['rooms','sqft']].values # Features\n    y = rentalDF['price'].values\
+          \          # Labels\n\n    # Split Data into Training and Testing \n   \
+          \ X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.20)\n\
+          \n    # Model Training\n    model = LinearRegression().fit(X,y)\n\n    sample_index\
+          \ = 0 # change ths index to test different samples\n    predict_rental_price\
+          \ = model.predict([X_test[sample_index]])[0]\n    print(f\"The Actual Rental\
+          \ Price for Rooms with count = {X_test[sample_index][0]} and Area in Sqft\
+          \ ={X_test[sample_index][1]} is={y_test[sample_index]}\")\n    print(f\"\
+          The Predicated Rental Price for Rooms with count = {X_test[sample_index][0]}\
+          \ and Area in Sqft = {X_test[sample_index][1]} is={predict_rental_price}\"\
+          )\n    return (predict_rental_price)\n    # Save the Model\n    #joblib.dump(model,'rental_price_model.joblib')\n\
+          \n\n    #Load the Model\n    #model = joblib.load('rental_price_model.joblib')\n\
+          \n    # initialize Flask Application\n    #app = Flask(__name__)\n\n   \
+          \ #@app.route('/')\n    #def home():\n        #return render_template('index.html')\n\
+          \n    #@app.route('/predict',methods=['POST'])\n    #def predict():\n  \
+          \      #rooms = int(request.form['rooms'])\n        #sqft = int(request.form['sqft'])\n\
+          \n        #Make the Prediction\n        #prediction = model.predict(np.array([[rooms,sqft]]))\n\
+          \        #return render_template('result.html',prediction=prediction[0])\n\
+          \n    if __name__ == \"__main__\":\n        app.run(debug=True,host=\"0.0.0.0\"\
+          )    \n    # Example Prediction for a specific test sample\n\n"
+        image: python:3.9
+pipelineInfo:
+  name: rental-prediction-pipeline
+root:
+  dag:
+    outputs:
+      parameters:
+        Output:
+          valueFromParameter:
+            outputParameterKey: Output
+            producerSubtask: modeldevelopment
+    tasks:
+      modeldevelopment:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-modeldevelopment
+        taskInfo:
+          name: modeldevelopment
+  outputDefinitions:
+    parameters:
+      Output:
+        parameterType: NUMBER_DOUBLE
+schemaVersion: 2.1.0
+sdkVersion: kfp-2.11.0
