@@ -30,6 +30,18 @@ components:
       parameters:
         Output:
           parameterType: NUMBER_INTEGER
+  comp-f3:
+    executorLabel: exec-f3
+    inputDefinitions:
+      parameters:
+        a:
+          parameterType: NUMBER_INTEGER
+        b:
+          parameterType: NUMBER_INTEGER
+    outputDefinitions:
+      parameters:
+        Output:
+          parameterType: NUMBER_INTEGER
 deploymentSpec:
   executors:
     exec-f1:
@@ -88,6 +100,34 @@ deploymentSpec:
         - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
           \ *\n\ndef f2(a: int, b:int) -> int:\n    return a - b\n\n"
         image: python:3.9
+    exec-f3:
+      container:
+        args:
+        - --executor_input
+        - '{{$}}'
+        - --function_to_execute
+        - f3
+        command:
+        - sh
+        - -c
+        - "\nif ! [ -x \"$(command -v pip)\" ]; then\n    python3 -m ensurepip ||\
+          \ python3 -m ensurepip --user || apt-get install python3-pip\nfi\n\nPIP_DISABLE_PIP_VERSION_CHECK=1\
+          \ python3 -m pip install --quiet --no-warn-script-location 'kfp==2.11.0'\
+          \ '--no-deps' 'typing-extensions>=3.7.4,<5; python_version<\"3.9\"' && \"\
+          $0\" \"$@\"\n"
+        - sh
+        - -ec
+        - 'program_path=$(mktemp -d)
+
+
+          printf "%s" "$0" > "$program_path/ephemeral_component.py"
+
+          _KFP_RUNTIME=true python3 -m kfp.dsl.executor_main                         --component_module_path                         "$program_path/ephemeral_component.py"                         "$@"
+
+          '
+        - "\nimport kfp\nfrom kfp import dsl\nfrom kfp.dsl import *\nfrom typing import\
+          \ *\n\ndef f3(a: int, b:int) -> int:\n    return a * b\n\n"
+        image: python:3.9
 pipelineInfo:
   name: numpipeline
 root:
@@ -97,7 +137,7 @@ root:
         Output:
           valueFromParameter:
             outputParameterKey: Output
-            producerSubtask: f1
+            producerSubtask: f3
     tasks:
       f1:
         cachingOptions:
@@ -125,6 +165,26 @@ root:
               componentInputParameter: b
         taskInfo:
           name: f2
+      f3:
+        cachingOptions:
+          enableCache: true
+        componentRef:
+          name: comp-f3
+        dependentTasks:
+        - f1
+        - f2
+        inputs:
+          parameters:
+            a:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: f1
+            b:
+              taskOutputParameter:
+                outputParameterKey: Output
+                producerTask: f2
+        taskInfo:
+          name: f3
   inputDefinitions:
     parameters:
       a:
