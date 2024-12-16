@@ -1,0 +1,20 @@
+#Stage 1:
+def Preprocessing:
+    df = pandas.read_csv('data/rental.csv')
+    x = df.values['area','sqft']
+    y = df.values['rent']
+def Training:
+    model = LinerRegression.fit(x.y)
+def Evalution: 
+    model.predict(y.test[0])
+
+
+def pipeline():
+    preprocession_out=preprocessing_output
+
+    Training_outupt=training(preprocessing_output)
+
+    evaluation_output=evaluation(Training_outupt)
+    return evaluation_output.output
+
+

@@ -147,3 +147,12 @@ kubectl apply -k "github.com/kubeflow/pipelines/manifests/kustomize/env/platform
 kubectl port-forward -n kubeflow svc/ml-pipeline-ui 8083:80 ```
 
 ### Open your browser and resolve http://localhost:8083
+
+### What is Kubeflow Pipelines? ###
+- Links: https://www.kubeflow.org/docs/components/pipelines/overview/
+- Kubeflow Pipelines (KFP) is a platform for building and deploying portable and scalable machine learning (ML) workflows using Docker containers.
+- With KFP(Kubeflow Pipeline) you can author components and Pipelines 
+- Compontent:
+   - A component is a remote function definition;
+   - It specifies inputs, has user defined logic in tis body and can create outputs. 
+   - When the components template is instantiated with input parameters, we call it a task.
