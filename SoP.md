@@ -156,3 +156,7 @@ kubectl port-forward -n kubeflow svc/ml-pipeline-ui 8083:80 ```
    - A component is a remote function definition;
    - It specifies inputs, has user defined logic in tis body and can create outputs. 
    - When the components template is instantiated with input parameters, we call it a task.
+### 
+``` sh curl -X POST http://localhost:5000/predict \
+-H "Content-Type: application/json" \
+-d '{"rooms_count": 2, "area_in_sqft": 1000}' ```

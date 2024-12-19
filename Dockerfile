@@ -12,7 +12,7 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Expose the port 
-EXPOSE 5000
+#EXPOSE 5000
 
 #default commands to run star the application. 
-CMD [ "python", "app.py" ]
+CMD [ "python", "mlkfapp.py" ]

@@ -4,3 +4,5 @@ numpy
 joblib
 flask
 kfp
+CORS
+flask_cors
